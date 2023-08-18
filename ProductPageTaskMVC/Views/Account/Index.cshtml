@@ -1,0 +1,40 @@
+﻿@model ProductPageTaskMVC.Models.AccountLoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Product Page MVC Task</h1>
+
+<h4>Login</h4>
+<hr />
+<div class="row mb-3">
+    <div class="col-md-4 mb-3">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="username" class="control-label"></label>
+                <input asp-for="username" class="form-control" />
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div mb-3>
+    <a asp-action="Index">Reset the page</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
