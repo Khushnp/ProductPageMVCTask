@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ProductPageTaskMVC.DBModel;
 
@@ -39,4 +37,6 @@ public partial class SimpleMvcdbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public DbSet<ProductPageTaskMVC.Models.ProductModel> ProductModel { get; set; } = default!;
 }

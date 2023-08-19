@@ -10,7 +10,7 @@
 <hr />
 <div class="row mb-3">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -29,11 +29,22 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                @if (Model.Image != null && Model.Image.Length > 0)
+                {
+                    <label asp-for="Image" class="control-label md-3"></label>
+                    <img src="data:image;base64,@Convert.ToBase64String(Model.Image)" alt="Product Image" width="200" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                }
+                else
+                {
+                    <span>No Image</span>
+                }
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group md-3">
+                <label for="imageDataFile" class="control-label md-3">Image</label>
+                <input type="file" name="imageDataFile" id="imageDataFile" class="form-control" />
+            </div>
+            <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -45,5 +56,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

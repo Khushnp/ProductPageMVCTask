@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProductPageTaskMVC.DBModel;
 using ProductPageTaskMVC.Models;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProductPageTaskMVC.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -32,14 +30,26 @@ namespace ProductPageTaskMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(ProductModel product,IFormFile imageDataFile)
         {
-            _dbContext.Products.Add(product);
+            var Data = new Product();
+            if (imageDataFile != null && imageDataFile.Length > 0)
+            {                
+                using (var memoryStream = new MemoryStream())
+                {
+                    imageDataFile.CopyTo(memoryStream);
+                    Data.Image = memoryStream.ToArray();
+                }
+                Data.Name = product.Name; Data.Description = product.Description;
+                Data.Amount = product.Amount;
+            }
+
+            _dbContext.Products.Add(Data);
             _dbContext.SaveChanges();
 
             TempData["Message"] = "Product Inserted Successfully";
 
-            return RedirectToAction("Index"); // Redirect to the Create view
+            return RedirectToAction("Index");
         }
 
 
@@ -51,7 +61,7 @@ namespace ProductPageTaskMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product data)
+        public ActionResult Edit(ProductModel data, IFormFile imageDataFile)
         {
             var product = _dbContext.Products.Where(x => x.Id == data.Id).FirstOrDefault();
             if(product != null)
@@ -59,7 +69,14 @@ namespace ProductPageTaskMVC.Controllers
                 product.Amount = data.Amount;
                 product.Description = data.Description;
                 product.Name = data.Name;
-                product.Image = data.Image;
+                if (imageDataFile != null && imageDataFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        imageDataFile.CopyTo(memoryStream);
+                        product.Image = memoryStream.ToArray();
+                    }
+                }
                 _dbContext.SaveChanges();
             }
             TempData["Message"] = "Product Edited Successfully";
