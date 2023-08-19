@@ -35,7 +35,7 @@ namespace ProductPageTaskMVC.Controllers
                     var jwtSecurityToken = Authentication.GenerateJetToken(Username, roles.ToList());
                     //Session["LoginedIn"] = Username;
                     var validUserName = Authentication.ValidateToken(jwtSecurityToken);
-                    return RedirectToAction("index", "Home", new { token = jwtSecurityToken });
+                    return RedirectToAction("index", "Home", new { token = jwtSecurityToken });//thid is where specific index of homecontroller is called 
                 }
 
                 ModelState.AddModelError("", "Invalid username or password.");
